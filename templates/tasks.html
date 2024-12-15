@@ -1,0 +1,37 @@
+<!-- templates/tasks.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="task-manager">
+    <h1>Task Manager</h1>
+    
+    <!-- Task Creation Form -->
+    <form method="POST" class="task-form">
+        <input type="text" name="title" placeholder="Task Title" required>
+        <textarea name="description" placeholder="Task Description"></textarea>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- Task List -->
+    <div class="task-list">
+        <h2>Your Tasks</h2>
+        {% if tasks %}
+            {% for task in tasks %}
+            <div class="task {% if task.completed %}completed{% endif %}">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.description }}</p>
+                <div class="task-actions">
+                    <span>Created: {{ task.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    {% if not task.completed %}
+                    <a href="{{ url_for('complete_task', task_id=task.id) }}" class="complete-btn">Complete</a>
+                    {% endif %}
+                    <a href="{{ url_for('delete_task', task_id=task.id) }}" class="delete-btn">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No tasks yet. Add a task above!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
