@@ -1,11 +1,18 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
+from flask import make_response, send_from_directory
 
 app = Flask(__name__)
 
 # In-memory task storage (would be a database in a real application)
 tasks = []
+
+@app.route('/static/sw.js')
+def service_worker():
+    response = make_response(send_from_directory('static', 'sw.js'))
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
 
 @app.route('/', methods=['GET', 'POST'])
 def task_list():
